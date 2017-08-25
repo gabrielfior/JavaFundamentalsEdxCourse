@@ -12,6 +12,10 @@ public class Movie {
     private ArrayList<Actor> actors;
     private double rating;
 
+    public Movie() {
+        
+    }
+
     public String getName() {
         return name;
     }

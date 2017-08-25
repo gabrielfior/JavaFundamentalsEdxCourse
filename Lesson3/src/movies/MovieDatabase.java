@@ -2,6 +2,7 @@ package movies;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by gabrielfior on 24.08.17.
@@ -36,6 +37,10 @@ public class MovieDatabase {
      * @param actors
      */
     void addMovie(String name, String[] actors){
+        if (!this.movieList.contains(name)){
+            Movie movie = new Movie();
+
+        }
 
     }
 
@@ -99,13 +104,14 @@ public class MovieDatabase {
      */
     public static void main(String[] args){
 
+        Map<String, List<String>> actorsMovies = CSVReader.readFileFromPath("resources/movies.txt", ",", false);
 
-        //TODO - implement me
+        Map<String, List<String>> ratings = CSVReader.readFileFromPath("resources/ratings.txt", "\t", true);
+
 
         MovieDatabase movieDatabase = new MovieDatabase();
 
 
     }
-
 
 }
