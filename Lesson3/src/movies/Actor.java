@@ -31,4 +31,9 @@ public class Actor {
         this.movies = movies;
     }
 
+    public Actor(String name) {
+        this.name = name;
+        this.movies = new ArrayList<>();
+    }
+
 }

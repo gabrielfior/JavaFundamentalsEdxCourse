@@ -1,8 +1,8 @@
 package movies;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by gabrielfior on 24.08.17.
@@ -34,11 +34,13 @@ public class MovieDatabase {
      If the movie is a new movie, a movie object is created and added to the movieList.
      If any of the actors happen to be new, they will be added to the actorList.
      * @param name
-     * @param actors
+     * @param
      */
-    void addMovie(String name, String[] actors){
+    void addMovie(String name){
         if (!this.movieList.contains(name)){
             Movie movie = new Movie();
+            movie.setName(name);
+            this.movieList.add(movie);
 
         }
 
@@ -69,19 +71,47 @@ public class MovieDatabase {
     String getBestActor(){
         //TODO - implement me!
         String actorName = "";
+        double finalAvgGrade = 0.0;
+        String bestActor = "";
         // iterate over list of actors
-        List<Movie> movies = this.getMoviesByActor(actorName);
-        double avgGrade = this.calculateAverageRating(movies);
+        List<Actor> actors = this.movieList.stream().flatMap(movie -> movie.getActors().stream())
+                .distinct().collect(Collectors.toList());
 
-        return "";
+        for (int i = 0; i < actors.size(); i++) {
+            actorName = actors.get(i).getName();
+            List<Movie> movies = this.getMoviesByActor(actorName);
+            double avgGrade = this.calculateAverageRating(movies);
+
+        if (avgGrade > finalAvgGrade){
+            finalAvgGrade = avgGrade;
+            bestActor = actorName;
+            }
+        }
+
+        return bestActor;
     }
 
     private double calculateAverageRating(List<Movie> movies) {
-        return 0.0;
+
+        double rating = 0.0;
+
+        for (int i = 0; i < movies.size(); i++) {
+            rating += movies.get(i).getRating();
+        }
+        rating = rating/movies.size();
+        return rating;
     }
 
     private List<Movie> getMoviesByActor(String actorName){
-        return new ArrayList<>();
+
+        List<Movie> moviesOfActor = new ArrayList<>();
+
+        this.movieList.stream().forEach(movie -> {
+            if (movie.getActors().contains(actorName)){
+                moviesOfActor.add(movie);
+            }
+        });
+        return moviesOfActor;
     }
 
 
@@ -91,7 +121,15 @@ public class MovieDatabase {
      * @return
      */
     String getBestMovie(){
-        return "";
+        double rating = 0.;
+        String bestMovie = "";
+        for (int i = 0; i < this.movieList.size(); i++) {
+            if (rating < this.movieList.get(i).getRating()){
+                rating = this.movieList.get(i).getRating();
+                bestMovie = this.movieList.get(i).getName();
+            }
+        }
+    return bestMovie;
     }
 
 
@@ -104,12 +142,33 @@ public class MovieDatabase {
      */
     public static void main(String[] args){
 
-        Map<String, List<String>> actorsMovies = CSVReader.readFileFromPath("resources/movies.txt", ",", false);
+        Map<String, String[]> actorsMovies = CSVReader.readFileFromPathMovies("C:\\Users\\d91421\\IdeaProjects\\JavaFundamentalsEdxCourse\\Lesson3\\resources\\movies.txt", ",", false);
 
-        Map<String, List<String>> ratings = CSVReader.readFileFromPath("resources/ratings.txt", "\t", true);
-
+        Map<String, String> ratings = CSVReader.readFileFromPathRatings("C:\\Users\\d91421\\IdeaProjects\\JavaFundamentalsEdxCourse\\Lesson3\\resources\\ratings.txt", "\t", true);
 
         MovieDatabase movieDatabase = new MovieDatabase();
+
+        actorsMovies.entrySet().stream()
+                .forEach(stringListEntry -> {
+                    for (int i = 0; i < stringListEntry.getValue().length; i++) {
+                        // iterating over movies
+                        Movie movie = new Movie();
+                        String name = stringListEntry.getValue()[i+1];
+                        movie.setName(name);
+                        movie.addActor(new Actor(stringListEntry.getKey()));
+
+                        //rating
+                        Double rating = Double.valueOf(ratings.get(name.replace(" ","")));
+                        movie.setRating(rating);
+
+                        movieDatabase.addMovie(stringListEntry.getKey());
+                    }
+                });
+
+
+        System.out.println(movieDatabase.getBestMovie());
+        System.out.println(movieDatabase.getBestActor());
+
 
 
     }

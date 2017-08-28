@@ -13,7 +13,7 @@ public class Movie {
     private double rating;
 
     public Movie() {
-        
+        this.actors = new ArrayList<>();
     }
 
     public String getName() {
@@ -32,6 +32,12 @@ public class Movie {
         this.actors = actors;
     }
 
+    public void addActor(Actor actor){
+        if (!this.actors.contains(actor)) {
+            this.actors.add(actor);
+        }
+    }
+
     public double getRating() {
         return rating;
     }
@@ -45,4 +51,6 @@ public class Movie {
         this.actors = actors;
         this.rating = rating;
     }
+
+
 }
