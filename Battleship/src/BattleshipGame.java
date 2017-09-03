@@ -14,12 +14,32 @@ public class BattleshipGame {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Type in 5 shots: \n");
         String response = scanner.nextLine();
-        List<TargetInput> var = parseResponse(response);
-        //System.out.println(var.toString());
-        System.out.println("Start game!");
+
+        // prepare game
+        Ocean ocean = new Ocean();
+
+        startGame(ocean);
+
+        if (response.equals("N")){
+            System.out.println("End");
+        }
+        else {
+            //keep playing
+            List<TargetInput> var = parseResponse(response);
+            //System.out.println(var.toString());
+            System.out.println("Start game!");
 
 
 
+        }
+
+
+
+
+    }
+
+    private static void startGame(Ocean ocean) {
+        ocean.placeAllShipsRandomly();
     }
 
     public static List<TargetInput> parseResponse(String response){

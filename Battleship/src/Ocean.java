@@ -1,3 +1,7 @@
+import java.util.Random;
+import java.util.Random.*;
+
+
 public class Ocean {
 
     public Ship[][] ships = new Ship[20][20];
@@ -21,9 +25,22 @@ public class Ocean {
 
 
     void placeAllShipsRandomly(){
+        Random randomx = new Random();
+        Random randomy = new Random();
+        Random randomHorizontal = new Random();
+        //random.nextInt(oceanSize);
+        // start with larger ships
 
+        //one 8-square Battleship, one 7-square Battlecruiser,
+        //        two 6-square Cruisers, two 5-square Light Cruisers,
+        //three 4-square Destroyers and four 3-square Submarines.
         //IMPLEMENT me
-        System.out.println("Implement method");
+
+        //place battleship
+        //FIXME
+
+
+
     }
 
     boolean isOccupied(int row, int column){
